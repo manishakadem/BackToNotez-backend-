@@ -1,0 +1,6 @@
+package com.cybage.bean;
+
+public class CartBean {
+	
+	
+}
