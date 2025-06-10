@@ -2,6 +2,8 @@ package com.cybage.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.cybage.bean.WishlistBean;
 
 public interface WishlistService {

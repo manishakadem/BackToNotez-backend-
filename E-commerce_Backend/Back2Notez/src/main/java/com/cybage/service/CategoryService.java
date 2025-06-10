@@ -9,4 +9,5 @@ public interface CategoryService {
 	public CategoryBean addCategory(CategoryBean categorybean);
 	
 	public List<CategoryBean> displayCategory();
+
 }

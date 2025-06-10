@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.cybage.bean.WishlistBean;
 import com.cybage.dao.ProductDao;
@@ -14,7 +15,7 @@ import com.cybage.dao.WishlistDao;
 import com.cybage.entity.ProductEntity;
 import com.cybage.entity.UserEntity;
 import com.cybage.entity.WishlistEntity;
-
+@Service
 public class WishlistServiceImpl implements WishlistService {
 
 	@Autowired
@@ -31,7 +32,7 @@ public class WishlistServiceImpl implements WishlistService {
 		WishlistEntity wishlistEntity = new WishlistEntity();
 		BeanUtils.copyProperties(wishlistBean, wishlistEntity);
 
-		int userId = wishlistBean.getUser().getUser_id();
+		int userId = wishlistBean.getUser().getUserId();
 		int productId = wishlistBean.getProduct().getProduct_id();
 
 		UserEntity managedUser = userdao.findById(userId)

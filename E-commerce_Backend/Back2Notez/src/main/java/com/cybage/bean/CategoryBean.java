@@ -2,6 +2,7 @@ package com.cybage.bean;
 
 public class CategoryBean {
 
+
 	private int category_id;
 	private String category_name;
 
@@ -36,5 +37,6 @@ public class CategoryBean {
 	public String toString() {
 		return "CategoryBean [category_id=" + category_id + ", category_name=" + category_name + "]";
 	}
+
 
 }

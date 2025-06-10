@@ -92,4 +92,7 @@ public class ProductBean {
 				+ product_stock_quantity + ", product_imageUrl=" + product_imageUrl + ", category=" + category + "]";
 	}
 
+
+	
+
 }
