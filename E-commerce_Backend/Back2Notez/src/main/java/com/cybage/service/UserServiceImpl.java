@@ -1,5 +1,4 @@
 package com.cybage.service;
-
 import com.cybage.bean.UserBean;
 import com.cybage.dao.UserDao;
 import com.cybage.entity.UserEntity;
@@ -78,4 +77,5 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
 }

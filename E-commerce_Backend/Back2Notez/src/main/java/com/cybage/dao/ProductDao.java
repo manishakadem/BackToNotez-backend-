@@ -1,5 +1,9 @@
 package com.cybage.dao;
 
-public interface ProductDao {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.cybage.entity.ProductEntity;
+
+public interface ProductDao extends JpaRepository<ProductEntity, Integer> {
 
 }

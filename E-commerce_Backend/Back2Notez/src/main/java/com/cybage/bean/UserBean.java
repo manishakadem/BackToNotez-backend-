@@ -1,7 +1,6 @@
 package com.cybage.bean;
 
 public class UserBean {
-
     private int userId;
     private String name;
     private String email;
@@ -63,4 +62,5 @@ public class UserBean {
         return "UserBean [userId=" + userId + ", name=" + name + ", email=" + email +
                ", password=" + password + ", contact=" + contact + "]";
     }
+
 }

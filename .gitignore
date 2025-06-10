@@ -1,0 +1,28 @@
+# Eclipse-specific
+.metadata/
+*.tmp
+*.bak
+*.swp
+*~.nib
+.localhistory/
+.recommenders/
+
+# Java and Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Git
+*.orig
+
+# Environment
+.env
