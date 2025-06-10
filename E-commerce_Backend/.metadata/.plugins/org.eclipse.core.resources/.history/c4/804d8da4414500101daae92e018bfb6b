@@ -1,0 +1,79 @@
+package com.cybage.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.UserBean;
+import com.cybage.entity.UserEntity;
+import com.cybage.dao.UserDao;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserDao userDao;
+
+    // Convert Entity to Bean
+    private UserBean toBean(UserEntity entity) {
+        return new UserBean(
+            entity.getuserId(),
+            entity.getName(),
+            entity.getEmail(),
+            entity.getPassword(),
+            entity.getContact()
+        );
+    }
+
+    // Convert Bean to Entity
+    private UserEntity toEntity(UserBean bean) {
+        return new UserEntity(
+            bean.getuserId(),
+            bean.getName(),
+            bean.getEmail(),
+            bean.getPassword(),
+            bean.getContact()
+        );
+    }
+
+    @Override
+    public UserBean createUser(UserBean userBean) {
+        UserEntity entity = toEntity(userBean);
+        UserEntity saved = userDao.save(entity);
+        return toBean(saved);
+    }
+
+    @Override
+    public List<UserBean> getAllUsers() {
+        return userDao.findAll().stream()
+                .map(this::toBean)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserBean getUserById(int userId) {
+        Optional<UserEntity> optional = userDao.findById(userId);
+        return optional.map(this::toBean).orElse(null);
+    }
+
+    @Override
+    public UserBean updateUser(UserBean userBean) {
+        if (userDao.existsById(userBean.getuserId())) {
+            UserEntity updated = userDao.save(toEntity(userBean));
+            return toBean(updated);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteUser(int userId) {
+        if (userDao.existsById(userId)) {
+            userDao.deleteById(userId);
+            return true;
+        }
+        return false;
+    }
+}
