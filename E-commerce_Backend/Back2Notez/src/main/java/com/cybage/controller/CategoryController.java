@@ -34,6 +34,7 @@ public class CategoryController {
 	public ResponseEntity<List<CategoryBean>> displayCategory() {
 
 		List<CategoryBean> list = categoryService.displayCategory();
+
 		if (list.isEmpty()) {
 			return new ResponseEntity<List<CategoryBean>>(list, HttpStatus.NOT_FOUND);
 		} else {

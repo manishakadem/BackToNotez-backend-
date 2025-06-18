@@ -13,4 +13,5 @@ public interface CartDetailsService {
 	public CartDetailsBean updateProduct(CartDetailsBean cartDetailsBean);
 
 	public boolean deleteCartDetails(int id);
+
 }

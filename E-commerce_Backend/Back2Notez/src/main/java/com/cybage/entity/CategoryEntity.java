@@ -1,13 +1,16 @@
 package com.cybage.entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+@Entity
 public class CategoryEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	private int categoryId;
 	private String categoryName;
 
@@ -36,10 +39,12 @@ public class CategoryEntity {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+
 	}
 
 	@Override
 	public String toString() {
+
 		return "CategoryEntity [categoryId=" + categoryId + ", categoryName=" + categoryName + "]";
 	}
 

@@ -60,4 +60,5 @@ public class CartDetailsController {
 			return new ResponseEntity<List<CartDetailsBean>>(list, HttpStatus.OK);
 		}
 	}
+
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cybage.bean.ProductBean;
@@ -36,6 +35,7 @@ public class ProductController {
 	public ResponseEntity<List<ProductBean>> displayProducts() {
 
 		List<ProductBean> list = productService.displayProducts();
+
 		if (list.isEmpty()) {
 			return new ResponseEntity<List<ProductBean>>(list, HttpStatus.NOT_FOUND);
 		} else {
@@ -45,7 +45,9 @@ public class ProductController {
 
 	@PutMapping("/updateProduct")
 	public ResponseEntity<ProductBean> updateProduct(@RequestBody ProductBean productBean) {
+
 		ProductBean updatedProductBean = productService.updateProduct(productBean);
+
 		if (updatedProductBean != null) {
 			return new ResponseEntity<>(updatedProductBean, HttpStatus.OK);
 		} else {
@@ -56,6 +58,7 @@ public class ProductController {
 	@DeleteMapping("deleteProduct/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable("id") int id) {
 		boolean deleted = productService.deleteProduct(id);
+
 		if (deleted) {
 			return ResponseEntity.ok("product with ID " + id + " deleted successfully.");
 		} else {

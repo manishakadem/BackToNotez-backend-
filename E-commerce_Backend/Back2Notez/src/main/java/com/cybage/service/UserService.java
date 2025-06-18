@@ -10,4 +10,5 @@ public interface UserService {
     UserBean getUserById(int userId);
     UserBean updateUser(UserBean userBean);
     boolean deleteUser(int userId);
+
 }

@@ -9,5 +9,4 @@ import com.cybage.entity.CategoryEntity;
 public interface CategoryDao extends JpaRepository<CategoryEntity, Integer> {
 
 	Optional<CategoryEntity> findByCategoryName(String categoryName);
-
 }

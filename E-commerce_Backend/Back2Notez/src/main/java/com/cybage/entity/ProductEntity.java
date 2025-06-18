@@ -12,6 +12,7 @@ public class ProductEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	private int productId;
 	private String productName;
 	private String productDescription;
@@ -86,6 +87,7 @@ public class ProductEntity {
 
 	public void setProductImageUrl(String productImageUrl) {
 		this.productImageUrl = productImageUrl;
+
 	}
 
 	public CategoryEntity getCategory() {
@@ -98,9 +100,11 @@ public class ProductEntity {
 
 	@Override
 	public String toString() {
+
 		return "ProductEntity [productId=" + productId + ", productName=" + productName + ", productDescription="
 				+ productDescription + ", productPrice=" + productPrice + ", productStockQuantity="
 				+ productStockQuantity + ", productImageUrl=" + productImageUrl + ", category=" + category + "]";
+
 	}
 
 }
