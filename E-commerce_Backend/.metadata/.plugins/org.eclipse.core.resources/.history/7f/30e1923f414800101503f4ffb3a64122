@@ -34,11 +34,19 @@ public class WishlistEntity {
 		this.product = product;
 	}
 
+<<<<<<< Updated upstream:E-commerce_Backend/.metadata/.plugins/org.eclipse.core.resources/.history/7f/30e1923f414800101503f4ffb3a64122
 	public int getWishlist_id() {
 		return wishlistId;
 	}
 
 	public void setWishlist_id(int wishlistId) {
+=======
+	public int getWishlistId() {
+		return wishlistId;
+	}
+
+	public void setWishlistId(int wishlistId) {
+>>>>>>> Stashed changes:E-commerce_Backend/Back2Notez/src/main/java/com/cybage/entity/WishlistEntity.java
 		this.wishlistId = wishlistId;
 	}
 

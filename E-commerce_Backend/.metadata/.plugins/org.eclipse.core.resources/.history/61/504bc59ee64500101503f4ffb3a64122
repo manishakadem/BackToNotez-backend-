@@ -14,5 +14,8 @@ public interface WishlistService {
 	public WishlistBean updateWishlist(WishlistBean wishlistbean);
 
 	public boolean deleteWishlist(int id);
+	
+	List<WishlistBean> getWishlistByUserId(int userId);
+
 
 }

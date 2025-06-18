@@ -103,8 +103,10 @@ public class CartDetailsServiceImpl implements CartDetailsService {
 
 		CartEntity cart = fetchCart(cartId);
 		cart.setTotalAmount(totalAmount);
-
+<<<<<<< Updated upstream
 		cartDao.save(cart);
-
+=======
+		cartDao.save(cart); 
+>>>>>>> Stashed changes
 	}
 }
