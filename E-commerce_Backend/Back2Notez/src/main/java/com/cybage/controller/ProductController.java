@@ -25,7 +25,7 @@ public class ProductController {
 	@Autowired
 	private ProductService productservice;
 
-	@PostMapping("addProduct")
+	@PostMapping("/addProduct")
 	public ResponseEntity<ProductBean> addProduct(@RequestBody ProductBean productBean) {
 		ProductBean newProductBean = productservice.addProduct(productBean);
 		ResponseEntity<ProductBean> responseEntity = new ResponseEntity<ProductBean>(newProductBean,

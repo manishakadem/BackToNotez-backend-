@@ -1,11 +1,31 @@
 package com.cybage.bean;
 
+import lombok.Data;
+import jakarta.validation.constraints.*;
+
+@Data
 public class UserBean {
     private int userId;
+    
+    @NotBlank(message="Name is requried")
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Name should contain characters")
     private String name;
+    
+    @NotBlank(message = "Email is required")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$", message = "Email must be a valid Gmail address")
     private String email;
+    
+    @NotBlank(message = "Password is required")
+    @Pattern(
+        regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!]).{8,}$",
+        message = "Password must be at least 8 characters and include a number, letter, and special character"
+    )
     private String password;
+    
+    @NotBlank(message = "Contact is required")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Contact must be a 10-digit number")  
     private String contact;
+    
 
     public UserBean() {}
 

@@ -4,20 +4,35 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
+//import com.cybage.enums.UserRole;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_entity" , uniqueConstraints = {
+		@UniqueConstraint(columnNames = "email"),
+		@UniqueConstraint(columnNames = "contact")
+})
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+   // @Column(name = "userId")
     private int userId;
 
+    @Column(nullable = false)
     private String name;
+    
+    @Column(nullable = false, unique = true)
     private String email;
+    
+    @Column(nullable = false)
     private String password;
+    
+    @Column(nullable = false, unique = true)
     private String contact;
+    
+//    @Enumerated(EnumType.STRING)
+//    @Column(name="role")
+//    private UserRole role;
 
     public UserEntity() {}
 

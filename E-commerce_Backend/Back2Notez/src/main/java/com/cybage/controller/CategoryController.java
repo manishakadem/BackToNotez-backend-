@@ -21,7 +21,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryservice;
 
-	@PostMapping(value = "addCategory", produces = "application/json")
+	@PostMapping(value = "addCategory")
 	public ResponseEntity<CategoryBean> addCategory(@RequestBody CategoryBean categoryBean) {
 		CategoryBean newCategoryBean = categoryservice.addCategory(categoryBean);
 		ResponseEntity<CategoryBean> responseEntity = new ResponseEntity<CategoryBean>(newCategoryBean,
