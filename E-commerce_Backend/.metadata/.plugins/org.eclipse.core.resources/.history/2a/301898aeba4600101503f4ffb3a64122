@@ -1,9 +1,0 @@
-package com.cybage.service;
-
-import com.cybage.bean.CartBean;
-
-public interface CartService {
-
-	public CartBean createCart(CartBean cartbean);
-
-}
