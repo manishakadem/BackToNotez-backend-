@@ -1,0 +1,115 @@
+package com.cybage.service;
+
+<<<<<<< HEAD
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.dao.CartDao;
+import com.cybage.dao.ProductDao;
+import com.cybage.dao.CartDetailsDao;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.ProductEntity;
+import com.cybage.entity.CartDetailsEntity;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class CartDetailsServiceImpl implements CartDetailsService {
+
+	@Autowired
+	private CartDetailsDao cartDetailsDao;
+
+	@Autowired
+	private CartDao cartDao;
+
+	@Autowired
+	private ProductDao productDao;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Override
+	public CartDetailsBean addCartDetails(CartDetailsBean cartDetailsBean) {
+		CartDetailsEntity cartDetailsEntity = modelMapper.map(cartDetailsBean, CartDetailsEntity.class);
+
+		CartEntity cart = fetchCart(cartDetailsBean.getCart().getCartId());
+		ProductEntity product = fetchProduct(cartDetailsBean.getProduct().getProductId());
+
+		cartDetailsEntity.setCart(cart);
+		cartDetailsEntity.setProduct(product);
+
+		double totalPrice = cartDetailsBean.getQuantity() * product.getProductPrice();
+		cartDetailsEntity.setPrice(totalPrice);
+
+		CartDetailsEntity savedEntity = cartDetailsDao.save(cartDetailsEntity);
+
+		updateTotalAmount(cart.getCartId());
+
+		return modelMapper.map(savedEntity, CartDetailsBean.class);
+	}
+
+	@Override
+	public CartDetailsBean updateProduct(CartDetailsBean cartDetailsBean) {
+		if (!cartDetailsDao.existsById(cartDetailsBean.getCartDetailsId())) {
+			throw new RuntimeException("CartDetails not found with ID: " + cartDetailsBean.getCartDetailsId());
+		}
+
+		CartDetailsEntity entity = modelMapper.map(cartDetailsBean, CartDetailsEntity.class);
+
+		CartEntity cart = fetchCart(cartDetailsBean.getCart().getCartId());
+		ProductEntity product = fetchProduct(cartDetailsBean.getProduct().getProductId());
+
+		entity.setCart(cart);
+		entity.setProduct(product);
+
+		double updatedPrice = cartDetailsBean.getQuantity() * product.getProductPrice();
+		entity.setPrice(updatedPrice);
+
+		CartDetailsEntity updatedEntity = cartDetailsDao.save(entity);
+
+		updateTotalAmount(cart.getCartId());
+
+		return modelMapper.map(updatedEntity, CartDetailsBean.class);
+	}
+
+	@Override
+	public List<CartDetailsBean> displayCartDetails() {
+		return cartDetailsDao.findAll().stream().map(entity -> modelMapper.map(entity, CartDetailsBean.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean deleteCartDetails(int id) {
+		return cartDetailsDao.findById(id).map(entity -> {
+			cartDetailsDao.delete(entity);
+			updateTotalAmount(entity.getCart().getCartId());
+			return true;
+		}).orElse(false);
+	}
+
+	private CartEntity fetchCart(int cartId) {
+		return cartDao.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cartId));
+	}
+
+	private ProductEntity fetchProduct(int productId) {
+		return productDao.findById(productId)
+				.orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+	}
+
+	private void updateTotalAmount(int cartId) {
+		double totalAmount = cartDetailsDao.findByCart_CartId(cartId).stream().mapToDouble(CartDetailsEntity::getPrice)
+				.sum();
+
+		CartEntity cart = fetchCart(cartId);
+		cart.setTotalAmount(totalAmount);
+
+		cartDao.save(cart);
+
+	}
+=======
+public class CartDetailsServiceImpl {
+
+>>>>>>> new-branch-name
+}

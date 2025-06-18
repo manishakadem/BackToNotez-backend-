@@ -1,0 +1,63 @@
+package com.cybage.controller;
+
+import com.cybage.bean.UserBean;
+import com.cybage.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping
+@CrossOrigin(origins = "http://localhost:4200/")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    // Create new user
+    @PostMapping("/create-user")
+    public ResponseEntity<UserBean> createUser(@RequestBody UserBean userBean) {
+        UserBean createdUser = userService.createUser(userBean);
+        return ResponseEntity.ok(createdUser);
+    }
+
+    // Get all users
+    @GetMapping("/users")
+    public ResponseEntity<List<UserBean>> getAllUsers() {
+        List<UserBean> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    // Get user by ID
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserBean> getUserById(@PathVariable int userId) {
+        UserBean user = userService.getUserById(userId);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Update user
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserBean> updateUser(@PathVariable int userId, @RequestBody UserBean userBean) {
+        userBean.setUserId(userId); // Ensure ID is set
+        UserBean updatedUser = userService.updateUser(userBean);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    // Delete user
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable int userId) {
+        boolean deleted = userService.deleteUser(userId);
+        if (deleted) {
+            return ResponseEntity.ok("User deleted successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
