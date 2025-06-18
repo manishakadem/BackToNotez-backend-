@@ -23,11 +23,15 @@ import com.cybage.service.WishlistService;
 public class WishlistController {
 
 	@Autowired
-	private WishlistService wishlistservice;
+	private WishlistService wishlistService;
 
 	@PostMapping("addWishllist")
 	public ResponseEntity<WishlistBean> addWishlist(@RequestBody WishlistBean wishlistBean) {
+<<<<<<< Updated upstream:E-commerce_Backend/.metadata/.plugins/org.eclipse.core.resources/.history/bb/20739ef9ff4b00101503f4ffb3a64122
 		WishlistBean savedWishlist = wishlistservice.addWishlist(wishlistBean);
+=======
+		WishlistBean savedWishlist = wishlistService.addWishlist(wishlistBean);
+>>>>>>> Stashed changes:E-commerce_Backend/Back2Notez/src/main/java/com/cybage/controller/WishlistController.java
 		return new ResponseEntity<>(savedWishlist, HttpStatus.CREATED);
 
 	}
@@ -35,7 +39,7 @@ public class WishlistController {
 	@GetMapping(value = "displayWishlist", produces = "application/json")
 	public ResponseEntity<List<WishlistBean>> displayWishlist() {
 
-		List<WishlistBean> list = wishlistservice.displayWishlist();
+		List<WishlistBean> list = wishlistService.displayWishlist();
 		if (list.isEmpty()) {
 			return new ResponseEntity<List<WishlistBean>>(list, HttpStatus.NOT_FOUND);
 		} else {
@@ -45,7 +49,7 @@ public class WishlistController {
 
 	@PutMapping("/updateWishlist")
 	public ResponseEntity<WishlistBean> updateWishlist(@RequestBody WishlistBean wishlistBean) {
-		WishlistBean updatedWishlistBean = wishlistservice.updateWishlist(wishlistBean);
+		WishlistBean updatedWishlistBean = wishlistService.updateWishlist(wishlistBean);
 		if (updatedWishlistBean != null) {
 			return new ResponseEntity<>(updatedWishlistBean, HttpStatus.OK);
 		} else {
@@ -55,12 +59,18 @@ public class WishlistController {
 
 	@DeleteMapping("deleteWishlist/{id}")
 	public ResponseEntity<String> deleteWishlist(@PathVariable("id") int id) {
-		boolean deleted = wishlistservice.deleteWishlist(id);
+		boolean deleted = wishlistService.deleteWishlist(id);
 		if (deleted) {
 			return ResponseEntity.ok("wishlist with ID " + id + " deleted successfully.");
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("wishlist with ID " + id + " not found.");
 		}
 	}
+	
+	@GetMapping("/user/{userId}")
+	public List<WishlistBean> getWishlistByUserId(@PathVariable int userId) {
+	    return wishlistService.getWishlistByUserId(userId);
+	}
+
 
 }

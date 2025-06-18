@@ -1,0 +1,53 @@
+package com.cybage.bean;
+
+public class CartBean {
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
+	private int cartId;
+	private UserBean user;
+	private Double totalAmount;
+
+	public CartBean() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public CartBean(int cartId, UserBean user, Double totalAmount) {
+		super();
+		this.cartId = cartId;
+		this.user = user;
+		this.totalAmount = totalAmount;
+	}
+
+	public int getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
+	}
+
+	public UserBean getUser() {
+		return user;
+	}
+
+	public void setUser(UserBean user) {
+		this.user = user;
+	}
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	@Override
+	public String toString() {
+		return "CartBean [cartId=" + cartId + ", user=" + user + ", totalAmount=" + totalAmount + "]";
+	}
+
+}

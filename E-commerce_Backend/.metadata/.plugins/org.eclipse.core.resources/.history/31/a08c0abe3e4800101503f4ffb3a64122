@@ -1,53 +1,50 @@
 package com.cybage.bean;
 
-import com.cybage.entity.ProductEntity;
-import com.cybage.entity.UserEntity;
-
 public class WishlistBean {
 
-	private int wishlist_id;
-	private UserEntity user;
-	private ProductEntity product;
+	private int wishlistId;
+	private UserBean user;
+	private ProductBean product;
 
 	public WishlistBean() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public WishlistBean(int wishlist_id, UserEntity user, ProductEntity product) {
+	public WishlistBean(int wishlistId, UserBean user, ProductBean product) {
 		super();
-		this.wishlist_id = wishlist_id;
+		this.wishlistId = wishlistId;
 		this.user = user;
 		this.product = product;
 	}
 
-	public int getWishlist_id() {
-		return wishlist_id;
+	public int getWishlistId() {
+		return wishlistId;
 	}
 
-	public void setWishlist_id(int wishlist_id) {
-		this.wishlist_id = wishlist_id;
+	public void setWishlistId(int wishlistId) {
+		this.wishlistId = wishlistId;
 	}
 
-	public UserEntity getUser() {
+	public UserBean getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(UserBean user) {
 		this.user = user;
 	}
 
-	public ProductEntity getProduct() {
+	public ProductBean getProduct() {
 		return product;
 	}
 
-	public void setProduct(ProductEntity product) {
+	public void setProduct(ProductBean product) {
 		this.product = product;
 	}
 
 	@Override
 	public String toString() {
-		return "WishlistBean [wishlist_id=" + wishlist_id + ", user=" + user + ", product=" + product + "]";
+		return "WishlistBean [wishlistId=" + wishlistId + ", user=" + user + ", product=" + product + "]";
 	}
 
 }
