@@ -1,13 +1,5 @@
 package com.cybage.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.cybage.bean.WishlistBean;
 import com.cybage.dao.ProductDao;
 import com.cybage.dao.UserDao;
@@ -15,85 +7,85 @@ import com.cybage.dao.WishlistDao;
 import com.cybage.entity.ProductEntity;
 import com.cybage.entity.UserEntity;
 import com.cybage.entity.WishlistEntity;
+import com.cybage.configuration.*;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class WishlistServiceImpl implements WishlistService {
 
 	@Autowired
-	private WishlistDao wishlistdao;
+	private WishlistDao wishlistDao;
 
 	@Autowired
-	private ProductDao productdao;
+	private UserDao userDao;
 
 	@Autowired
-	private UserDao userdao;
+	private ProductDao productDao;
+
+	  @Autowired
+	    private ModelMapper modelMapper;
 
 	@Override
 	public WishlistBean addWishlist(WishlistBean wishlistBean) {
-		WishlistEntity wishlistEntity = new WishlistEntity();
-		BeanUtils.copyProperties(wishlistBean, wishlistEntity);
+		WishlistEntity wishlistEntity = modelMapper.map(wishlistBean, WishlistEntity.class);
 
-		int userId = wishlistBean.getUser().getUserId();
-		int productId = wishlistBean.getProduct().getProduct_id();
+		wishlistEntity.setUser(fetchUser(wishlistBean.getUser().getUserId()));
+		wishlistEntity.setProduct(fetchProduct(wishlistBean.getProduct().getProductId()));
 
-		UserEntity managedUser = userdao.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-
-		ProductEntity managedProduct = productdao.findById(productId)
-				.orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
-
-		wishlistEntity.setUser(managedUser);
-		wishlistEntity.setProduct(managedProduct);
-
-		WishlistEntity savedEntity = wishlistdao.save(wishlistEntity);
-		BeanUtils.copyProperties(savedEntity, wishlistBean);
-		wishlistBean.setUser(savedEntity.getUser());
-		wishlistBean.setProduct(savedEntity.getProduct());
-
-		return wishlistBean;
+		return modelMapper.map(wishlistDao.save(wishlistEntity), WishlistBean.class);
 	}
 
 	@Override
 	public List<WishlistBean> displayWishlist() {
-		List<WishlistBean> listWishlistBean = null;
-		List<WishlistEntity> listWishlistEntity = wishlistdao.findAll();
-		if (listWishlistEntity != null) {
-			listWishlistBean = new ArrayList<>();
-			for (WishlistEntity wishlistEntity : listWishlistEntity) {
-				WishlistBean wishlistbean = new WishlistBean();
-				BeanUtils.copyProperties(wishlistEntity, wishlistbean);
-				listWishlistBean.add(wishlistbean);
-
-			}
-		}
-		return listWishlistBean;
-
+		List<WishlistEntity> wishlistEntities = wishlistDao.findAll();
+		return wishlistEntities.stream().map(entity -> modelMapper.map(entity, WishlistBean.class))
+				.collect(Collectors.toList());
 	}
 
 	@Override
-	public WishlistBean updateWishlist(WishlistBean wishlistbean) {
-		Optional<WishlistEntity> requiredWishlistEntity = wishlistdao.findById(wishlistbean.getWishlist_id());
-		if (requiredWishlistEntity.isPresent()) {
-			WishlistEntity updateWishlistEntity = requiredWishlistEntity.get();
-
-			BeanUtils.copyProperties(wishlistbean, updateWishlistEntity);
-			wishlistdao.save(updateWishlistEntity);
-
-			WishlistBean newWishlistBean = new WishlistBean();
-			BeanUtils.copyProperties(updateWishlistEntity, newWishlistBean);
-			return newWishlistBean;
-		} else {
-			return null;
+	public WishlistBean updateWishlist(WishlistBean wishlistBean) {
+		if (!wishlistDao.existsById(wishlistBean.getWishlistId())) {
+			throw new RuntimeException("Wishlist not found with ID: " + wishlistBean.getWishlistId());
 		}
+
+		WishlistEntity wishlistEntity = modelMapper.map(wishlistBean, WishlistEntity.class);
+
+		wishlistEntity.setUser(fetchUser(wishlistBean.getUser().getUserId()));
+		wishlistEntity.setProduct(fetchProduct(wishlistBean.getProduct().getProductId()));
+
+		return modelMapper.map(wishlistDao.save(wishlistEntity), WishlistBean.class);
 	}
 
 	@Override
 	public boolean deleteWishlist(int id) {
-		if (wishlistdao.existsById(id)) {
-			wishlistdao.deleteById(id);
+		if (wishlistDao.existsById(id)) {
+			wishlistDao.deleteById(id);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
+	@Override
+	public List<WishlistBean> getWishlistByUserId(int userId) {
+		List<WishlistEntity> wishlistEntities = wishlistDao.findByUserUserId(userId);
+
+		return wishlistEntities.stream().map(entity -> modelMapper.map(entity, WishlistBean.class))
+				.collect(Collectors.toList());
+	}
+
+	private UserEntity fetchUser(int userId) {
+		return userDao.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+	}
+
+	private ProductEntity fetchProduct(int productId) {
+		return productDao.findById(productId)
+				.orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+	}
 }

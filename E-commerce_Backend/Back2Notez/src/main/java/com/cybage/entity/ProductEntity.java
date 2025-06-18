@@ -1,6 +1,5 @@
 package com.cybage.entity;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,12 +14,13 @@ public class ProductEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int product_id;
-	private String product_name;
-	private String product_description;
-	private double product_price;
-	private int product_stock_quantity;
-	private String product_imageUrl;
+
+	private int productId;
+	private String productName;
+	private String productDescription;
+	private double productPrice;
+	private int productStockQuantity;
+	private String productImageUrl;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
@@ -31,64 +31,65 @@ public class ProductEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProductEntity(int product_id, String product_name, String product_description, double product_price,
-			int product_stock_quantity, String product_imageUrl, CategoryEntity category) {
+	public ProductEntity(int productId, String productName, String productDescription, double productPrice,
+			int productStockQuantity, String productImageUrl, CategoryEntity category) {
 		super();
-		this.product_id = product_id;
-		this.product_name = product_name;
-		this.product_description = product_description;
-		this.product_price = product_price;
-		this.product_stock_quantity = product_stock_quantity;
-		this.product_imageUrl = product_imageUrl;
+		this.productId = productId;
+		this.productName = productName;
+		this.productDescription = productDescription;
+		this.productPrice = productPrice;
+		this.productStockQuantity = productStockQuantity;
+		this.productImageUrl = productImageUrl;
 		this.category = category;
 	}
 
-	public int getProduct_id() {
-		return product_id;
+	public int getProductId() {
+		return productId;
 	}
 
-	public void setProduct_id(int product_id) {
-		this.product_id = product_id;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 
-	public String getProduct_name() {
-		return product_name;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setProduct_name(String product_name) {
-		this.product_name = product_name;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public String getProduct_description() {
-		return product_description;
+	public String getProductDescription() {
+		return productDescription;
 	}
 
-	public void setProduct_description(String product_description) {
-		this.product_description = product_description;
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
 	}
 
-	public double getProduct_price() {
-		return product_price;
+	public double getProductPrice() {
+		return productPrice;
 	}
 
-	public void setProduct_price(double product_price) {
-		this.product_price = product_price;
+	public void setProductPrice(double productPrice) {
+		this.productPrice = productPrice;
 	}
 
-	public int getProduct_stock_quantity() {
-		return product_stock_quantity;
+	public int getProductStockQuantity() {
+		return productStockQuantity;
 	}
 
-	public void setProduct_stock_quantity(int product_stock_quantity) {
-		this.product_stock_quantity = product_stock_quantity;
+	public void setProductStockQuantity(int productStockQuantity) {
+		this.productStockQuantity = productStockQuantity;
 	}
 
-	public String getProduct_imageUrl() {
-		return product_imageUrl;
+	public String getProductImageUrl() {
+		return productImageUrl;
 	}
 
-	public void setProduct_imageUrl(String product_imageUrl) {
-		this.product_imageUrl = product_imageUrl;
+	public void setProductImageUrl(String productImageUrl) {
+		this.productImageUrl = productImageUrl;
+
 	}
 
 	public CategoryEntity getCategory() {
@@ -101,9 +102,11 @@ public class ProductEntity {
 
 	@Override
 	public String toString() {
-		return "ProductEntity [product_id=" + product_id + ", product_name=" + product_name + ", product_description="
-				+ product_description + ", product_price=" + product_price + ", product_stock_quantity="
-				+ product_stock_quantity + ", product_imageUrl=" + product_imageUrl + ", category=" + category + "]";
+
+		return "ProductEntity [productId=" + productId + ", productName=" + productName + ", productDescription="
+				+ productDescription + ", productPrice=" + productPrice + ", productStockQuantity="
+				+ productStockQuantity + ", productImageUrl=" + productImageUrl + ", category=" + category + "]";
+
 	}
 
 }

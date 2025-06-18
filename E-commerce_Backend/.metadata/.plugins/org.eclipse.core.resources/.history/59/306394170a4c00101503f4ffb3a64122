@@ -1,0 +1,16 @@
+package com.cybage.service;
+
+public interface CategoryService {
+
+<<<<<<< Updated upstream
+=======
+	public CategoryBean addCategory(CategoryBean categoryBean);
+
+	public List<CategoryBean> displayCategory();
+
+	CategoryBean updateCategory(CategoryBean categoryBean);
+
+	boolean deleteCategory(int id);
+
+>>>>>>> Stashed changes
+}

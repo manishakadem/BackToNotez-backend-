@@ -1,10 +1,10 @@
 package com.cybage.service;
 
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +16,42 @@ import com.cybage.entity.CategoryEntity;
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
-	private CategoryDao categorydao;
+	private CategoryDao categoryDao;
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
-	public CategoryBean addCategory(CategoryBean categorybean) {
-		CategoryEntity categoryentity = new CategoryEntity();
-		BeanUtils.copyProperties(categorybean, categoryentity);
-		CategoryEntity category = categorydao.save(categoryentity);
-		BeanUtils.copyProperties(category, categorybean);
-		return categorybean;
+	public CategoryBean addCategory(CategoryBean categoryBean) {
+		CategoryEntity categoryEntity = modelMapper.map(categoryBean, CategoryEntity.class);
+		CategoryEntity savedEntity = categoryDao.save(categoryEntity);
+		return modelMapper.map(savedEntity, CategoryBean.class);
 	}
 
 	@Override
 	public List<CategoryBean> displayCategory() {
-		List<CategoryBean> listCategoryBean = null;
-		List<CategoryEntity> listCategoryEntity = categorydao.findAll();
-		if (listCategoryEntity != null) {
-			listCategoryBean = new ArrayList<>();
-			for (CategoryEntity movieEntity : listCategoryEntity) {
-				CategoryBean moviebean = new CategoryBean();
-				BeanUtils.copyProperties(movieEntity, moviebean);
-				listCategoryBean.add(moviebean);
-
-			}
-		}
-		return listCategoryBean;
+		return categoryDao.findAll().stream().map(entity -> modelMapper.map(entity, CategoryBean.class))
+				.collect(Collectors.toList());
 	}
 
+	@Override
+	public CategoryBean updateCategory(CategoryBean categoryBean) {
+		Optional<CategoryEntity> optionalEntity = categoryDao.findById(categoryBean.getCategoryId());
+		if (optionalEntity.isPresent()) {
+			CategoryEntity existingEntity = optionalEntity.get();
+			modelMapper.map(categoryBean, existingEntity);
+			CategoryEntity updatedEntity = categoryDao.save(existingEntity);
+			return modelMapper.map(updatedEntity, CategoryBean.class);
+		}
+		throw new RuntimeException("Category not found with ID: " + categoryBean.getCategoryId());
+	}
+
+	@Override
+	public boolean deleteCategory(int id) {
+		if (categoryDao.existsById(id)) {
+			categoryDao.deleteById(id);
+			return true;
+		}
+		return false;
+	}
 }

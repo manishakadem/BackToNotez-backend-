@@ -1,6 +1,5 @@
 package com.cybage.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +22,20 @@ import com.cybage.service.ProductService;
 public class ProductController {
 
 	@Autowired
-	private ProductService productservice;
+	private ProductService productService;
 
 	@PostMapping("/addProduct")
 	public ResponseEntity<ProductBean> addProduct(@RequestBody ProductBean productBean) {
-		ProductBean newProductBean = productservice.addProduct(productBean);
-		ResponseEntity<ProductBean> responseEntity = new ResponseEntity<ProductBean>(newProductBean,
-				HttpStatus.CREATED);
-		return responseEntity;
+		ProductBean savedProduct = productService.addProduct(productBean);
+		return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+
 	}
 
-	@GetMapping(value = "displayProducts", produces = "application/json")
+	@GetMapping(value = "displayProducts")
 	public ResponseEntity<List<ProductBean>> displayProducts() {
 
-		List<ProductBean> list = productservice.displayProducts();
+		List<ProductBean> list = productService.displayProducts();
+
 		if (list.isEmpty()) {
 			return new ResponseEntity<List<ProductBean>>(list, HttpStatus.NOT_FOUND);
 		} else {
@@ -46,7 +45,9 @@ public class ProductController {
 
 	@PutMapping("/updateProduct")
 	public ResponseEntity<ProductBean> updateProduct(@RequestBody ProductBean productBean) {
-		ProductBean updatedProductBean = productservice.updateProduct(productBean);
+
+		ProductBean updatedProductBean = productService.updateProduct(productBean);
+
 		if (updatedProductBean != null) {
 			return new ResponseEntity<>(updatedProductBean, HttpStatus.OK);
 		} else {
@@ -56,11 +57,25 @@ public class ProductController {
 
 	@DeleteMapping("deleteProduct/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable("id") int id) {
-		boolean deleted = productservice.deleteProduct(id);
+		boolean deleted = productService.deleteProduct(id);
+
 		if (deleted) {
 			return ResponseEntity.ok("product with ID " + id + " deleted successfully.");
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("product with ID " + id + " not found.");
 		}
 	}
+
+	@GetMapping("/searchProducts/{name}")
+	public ResponseEntity<List<ProductBean>> searchProducts(@PathVariable String name) {
+
+		List<ProductBean> result = productService.searchProductsByName(name);
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/category/{categoryName}")
+	public List<ProductBean> getProductsByCategoryName(@PathVariable String categoryName) {
+		return productService.getProductsByCategoryName(categoryName);
+	}
+
 }

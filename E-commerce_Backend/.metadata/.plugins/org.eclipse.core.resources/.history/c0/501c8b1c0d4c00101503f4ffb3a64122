@@ -1,0 +1,16 @@
+package com.cybage.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+<<<<<<< Updated upstream
+
+import com.cybage.entity.CartEntity;
+
+public interface CartDao extends JpaRepository<CartEntity, Integer> {
+=======
+>>>>>>> Stashed changes
+
+import com.cybage.entity.CartEntity;
+
+public interface CartDao extends JpaRepository<CartEntity, Integer> {
+	
+}

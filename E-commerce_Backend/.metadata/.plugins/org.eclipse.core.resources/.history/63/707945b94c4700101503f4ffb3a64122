@@ -1,0 +1,70 @@
+package com.cybage.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.dao.CartDao;
+import com.cybage.dao.CartDetailsDao;
+import com.cybage.dao.ProductDao;
+import com.cybage.entity.CartDetailsEntity;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.ProductEntity;
+
+@Service
+public class CartDetailsServiceImpl implements CartDetailsService {
+
+	@Autowired
+	private CartDetailsDao cartDetailsDao;
+
+	@Autowired
+	private CartDao cartDao;
+
+	@Autowired
+	private ProductDao productDao;
+	
+	@Override
+	public CartDetailsBean addCartDetails(CartDetailsBean cartDetailsBean) {
+		CartDetailsEntity entity = new CartDetailsEntity();
+
+		CartEntity cart = cartDao.findById(cartDetailsBean.getCart().getCart_id())
+				.orElseThrow(() -> new RuntimeException("Cart not found"));
+
+		ProductEntity product = productDao.findById(cartDetailsBean.getProduct().getProduct_id())
+				.orElseThrow(() -> new RuntimeException("Product not found"));
+
+		entity.setCart(cart);
+		entity.setProduct(product);
+		entity.setPrice(cartDetailsBean.getPrice());
+		entity.setQuantity(cartDetailsBean.getQuantity());
+
+		entity = cartDetailsDao.save(entity);
+
+		cartDetailsBean.setCartDetails_id(entity.getCartDetails_id());
+		return cartDetailsBean;
+	}
+
+	@Override
+	public List<CartDetailsBean> displayCartDetails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CartDetailsBean updateProduct(CartDetailsBean cartDetailsBean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteCartDetails(int id) {
+		if (cartDetailsDao.existsById(id)) {
+			cartDetailsDao.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
+}

@@ -1,19 +1,21 @@
 package com.cybage.service;
 
-
 import java.util.List;
 
 import com.cybage.bean.ProductBean;
 
 public interface ProductService {
 
-	public ProductBean addProduct(ProductBean productbean);
-	
+	public ProductBean addProduct(ProductBean productBean);
+
 	public List<ProductBean> displayProducts();
-	
-	public ProductBean updateProduct(ProductBean productbean);
-	
+
+	public ProductBean updateProduct(ProductBean productBean);
+
 	public boolean deleteProduct(int id);
 
+	List<ProductBean> searchProductsByName(String name);
+
+	public List<ProductBean> getProductsByCategoryName(String categoryName);
 
 }

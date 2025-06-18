@@ -1,0 +1,74 @@
+package com.cybage.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
+public class WishlistEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int wishlistId;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
+
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private ProductEntity product;
+
+	public WishlistEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public WishlistEntity(int wishlistId, UserEntity user, ProductEntity product) {
+		super();
+		this.wishlistId = wishlistId;
+		this.user = user;
+		this.product = product;
+	}
+
+<<<<<<< Updated upstream:E-commerce_Backend/.metadata/.plugins/org.eclipse.core.resources/.history/7f/30e1923f414800101503f4ffb3a64122
+	public int getWishlist_id() {
+		return wishlistId;
+	}
+
+	public void setWishlist_id(int wishlistId) {
+=======
+	public int getWishlistId() {
+		return wishlistId;
+	}
+
+	public void setWishlistId(int wishlistId) {
+>>>>>>> Stashed changes:E-commerce_Backend/Back2Notez/src/main/java/com/cybage/entity/WishlistEntity.java
+		this.wishlistId = wishlistId;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
+
+	public ProductEntity getProduct() {
+		return product;
+	}
+
+	public void setProduct(ProductEntity product) {
+		this.product = product;
+	}
+
+	@Override
+	public String toString() {
+		return "WishlistBean [wishlistId=" + wishlistId + ", user=" + user + ", product=" + product + "]";
+	}
+
+}

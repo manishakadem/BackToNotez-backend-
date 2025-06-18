@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,20 +22,19 @@ import com.cybage.service.CategoryService;
 public class CategoryController {
 
 	@Autowired
-	private CategoryService categoryservice;
+	private CategoryService categoryService;
 
 	@PostMapping(value = "addCategory")
 	public ResponseEntity<CategoryBean> addCategory(@RequestBody CategoryBean categoryBean) {
-		CategoryBean newCategoryBean = categoryservice.addCategory(categoryBean);
-		ResponseEntity<CategoryBean> responseEntity = new ResponseEntity<CategoryBean>(newCategoryBean,
-				HttpStatus.CREATED);
-		return responseEntity;
+		CategoryBean savedCategory = categoryService.addCategory(categoryBean);
+		return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = "displayCategory", produces = "application/json")
+	@GetMapping(value = "displayCategory")
 	public ResponseEntity<List<CategoryBean>> displayCategory() {
 
-		List<CategoryBean> list = categoryservice.displayCategory();
+		List<CategoryBean> list = categoryService.displayCategory();
+
 		if (list.isEmpty()) {
 			return new ResponseEntity<List<CategoryBean>>(list, HttpStatus.NOT_FOUND);
 		} else {
@@ -41,5 +43,24 @@ public class CategoryController {
 
 	}
 
+	@PutMapping("/updateCategory")
+	public ResponseEntity<CategoryBean> updateCategory(@RequestBody CategoryBean categoryBean) {
+		CategoryBean updatedCategoryBean = categoryService.updateCategory(categoryBean);
+		if (updatedCategoryBean != null) {
+			return new ResponseEntity<>(updatedCategoryBean, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("deleteCategory/{id}")
+	public ResponseEntity<String> deleteCategory(@PathVariable("id") int id) {
+		boolean deleted = categoryService.deleteCategory(id);
+		if (deleted) {
+			return ResponseEntity.ok("category with ID " + id + " deleted successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("category with ID " + id + " not found.");
+		}
+	}
 
 }

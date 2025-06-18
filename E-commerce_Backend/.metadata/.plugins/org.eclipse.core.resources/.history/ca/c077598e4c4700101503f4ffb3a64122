@@ -1,0 +1,29 @@
+package com.cybage.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.service.CartDetailsService;
+
+@RestController
+@RequestMapping(value = "cartDetailsDetails")
+public class CartDetailsController {
+
+	@Autowired
+	private CartDetailsService cartDetailsService;
+
+	@PostMapping("/addCartDetailsDetails")
+	public ResponseEntity<CartDetailsBean> addCartDetails(@RequestBody CartDetailsBean cartDetailsBean) {
+		CartDetailsBean newCartDetailsBean = cartDetailsService.addCartDetails(cartDetailsBean);
+		ResponseEntity<CartDetailsBean> responseEntity = new ResponseEntity<CartDetailsBean>(newCartDetailsBean,
+				HttpStatus.CREATED);
+		return responseEntity;
+	}
+
+}

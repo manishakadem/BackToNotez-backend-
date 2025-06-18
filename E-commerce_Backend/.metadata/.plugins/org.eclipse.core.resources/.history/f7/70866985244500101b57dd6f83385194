@@ -1,0 +1,83 @@
+package com.cybage.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
+public class WishlistEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< Updated upstream:E-commerce_Backend/.metadata/.plugins/org.eclipse.core.resources/.history/f7/70866985244500101b57dd6f83385194
+	private long wishlist_id;
+=======
+	private int wishlistId;
+>>>>>>> Stashed changes:E-commerce_Backend/Back2Notez/src/main/java/com/cybage/entity/WishlistEntity.java
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
+
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private ProductEntity product;
+
+	public WishlistEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+<<<<<<< Updated upstream:E-commerce_Backend/.metadata/.plugins/org.eclipse.core.resources/.history/f7/70866985244500101b57dd6f83385194
+	public WishlistEntity(long wishlist_id, UserEntity user, ProductEntity product) {
+=======
+	public WishlistEntity(int wishlistId, UserEntity user, ProductEntity product) {
+>>>>>>> Stashed changes:E-commerce_Backend/Back2Notez/src/main/java/com/cybage/entity/WishlistEntity.java
+		super();
+		this.wishlistId = wishlistId;
+		this.user = user;
+		this.product = product;
+	}
+
+<<<<<<< Updated upstream:E-commerce_Backend/.metadata/.plugins/org.eclipse.core.resources/.history/f7/70866985244500101b57dd6f83385194
+	public long getWishlist_id() {
+		return wishlist_id;
+	}
+
+	public void setWishlist_id(long wishlist_id) {
+		this.wishlist_id = wishlist_id;
+=======
+	public int getWishlistId() {
+		return wishlistId;
+	}
+
+	public void setWishlistId(int wishlistId) {
+		this.wishlistId = wishlistId;
+>>>>>>> Stashed changes:E-commerce_Backend/Back2Notez/src/main/java/com/cybage/entity/WishlistEntity.java
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
+
+	public ProductEntity getProduct() {
+		return product;
+	}
+
+	public void setProduct(ProductEntity product) {
+		this.product = product;
+	}
+
+	@Override
+	public String toString() {
+		return "WishlistBean [wishlistId=" + wishlistId + ", user=" + user + ", product=" + product + "]";
+	}
+
+}

@@ -6,8 +6,12 @@ import com.cybage.bean.CategoryBean;
 
 public interface CategoryService {
 
-	public CategoryBean addCategory(CategoryBean categorybean);
-	
+	public CategoryBean addCategory(CategoryBean categoryBean);
+
 	public List<CategoryBean> displayCategory();
+
+	CategoryBean updateCategory(CategoryBean categoryBean);
+
+	boolean deleteCategory(int id);
 
 }

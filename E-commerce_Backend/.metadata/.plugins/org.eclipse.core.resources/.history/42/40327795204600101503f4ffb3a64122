@@ -1,0 +1,6 @@
+package com.cybage.bean;
+
+public class CartBean {
+	private int cart_id;
+	private UserBean user;
+}
