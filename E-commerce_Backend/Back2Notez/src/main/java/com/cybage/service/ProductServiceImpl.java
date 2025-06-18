@@ -1,5 +1,96 @@
 package com.cybage.service;
 
-public class ProductServiceImpl {
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.ProductBean;
+import com.cybage.dao.CategoryDao;
+import com.cybage.dao.ProductDao;
+import com.cybage.entity.CategoryEntity;
+import com.cybage.entity.ProductEntity;
+
+@Service
+public class ProductServiceImpl implements ProductService {
+
+	@Autowired
+	private ProductDao productDao;
+
+	@Autowired
+	private CategoryDao categoryDao;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Override
+	public ProductBean addProduct(ProductBean productBean) {
+		ProductEntity productEntity = modelMapper.map(productBean, ProductEntity.class);
+
+		CategoryEntity categoryEntity = fetchCategory(productBean.getCategory().getCategoryId());
+		productEntity.setCategory(categoryEntity);
+
+		ProductEntity savedEntity = productDao.save(productEntity);
+		return modelMapper.map(savedEntity, ProductBean.class);
+	}
+
+	@Override
+	public List<ProductBean> displayProducts() {
+		List<ProductEntity> productEntities = productDao.findAll();
+		return productEntities.stream().map(entity -> modelMapper.map(entity, ProductBean.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public ProductBean updateProduct(ProductBean productBean) {
+		Optional<ProductEntity> optionalEntity = productDao.findById(productBean.getProductId());
+
+		if (!optionalEntity.isPresent()) {
+			throw new RuntimeException("Product not found with ID: " + productBean.getProductId());
+		}
+
+		ProductEntity existingEntity = optionalEntity.get();
+		modelMapper.map(productBean, existingEntity);
+
+		CategoryEntity categoryEntity = fetchCategory(productBean.getCategory().getCategoryId());
+		existingEntity.setCategory(categoryEntity);
+
+		ProductEntity updatedEntity = productDao.save(existingEntity);
+		return modelMapper.map(updatedEntity, ProductBean.class);
+	}
+
+	@Override
+	public boolean deleteProduct(int id) {
+		if (productDao.existsById(id)) {
+			productDao.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<ProductBean> searchProductsByName(String name) {
+		List<ProductEntity> matchingProducts = productDao.searchByProductName(name);
+		return matchingProducts.stream().map(entity -> modelMapper.map(entity, ProductBean.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ProductBean> getProductsByCategoryName(String categoryName) {
+		CategoryEntity categoryEntity = categoryDao.findByCategoryName(categoryName)
+				.orElseThrow(() -> new RuntimeException("Category not found with name: " + categoryName));
+
+		List<ProductEntity> products = productDao.findByCategory(categoryEntity);
+
+		return products.stream().map(product -> modelMapper.map(product, ProductBean.class))
+				.collect(Collectors.toList());
+	}
+
+	private CategoryEntity fetchCategory(int categoryId) {
+		return categoryDao.findById(categoryId)
+				.orElseThrow(() -> new RuntimeException("Category not found with ID: " + categoryId));
+	}
 }

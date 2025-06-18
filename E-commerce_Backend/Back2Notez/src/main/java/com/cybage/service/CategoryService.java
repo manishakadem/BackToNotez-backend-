@@ -1,5 +1,17 @@
 package com.cybage.service;
 
+import java.util.List;
+
+import com.cybage.bean.CategoryBean;
+
 public interface CategoryService {
+
+	public CategoryBean addCategory(CategoryBean categoryBean);
+
+	public List<CategoryBean> displayCategory();
+
+	CategoryBean updateCategory(CategoryBean categoryBean);
+
+	boolean deleteCategory(int id);
 
 }

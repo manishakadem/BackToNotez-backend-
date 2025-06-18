@@ -12,7 +12,7 @@ public class WishlistEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int wishlist_id;
+	private int wishlistId;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -27,19 +27,19 @@ public class WishlistEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public WishlistEntity(int wishlist_id, UserEntity user, ProductEntity product) {
+	public WishlistEntity(int wishlistId, UserEntity user, ProductEntity product) {
 		super();
-		this.wishlist_id = wishlist_id;
+		this.wishlistId = wishlistId;
 		this.user = user;
 		this.product = product;
 	}
 
-	public int getWishlist_id() {
-		return wishlist_id;
+	public int getWishlistId() {
+		return wishlistId;
 	}
 
-	public void setWishlist_id(int wishlist_id) {
-		this.wishlist_id = wishlist_id;
+	public void setWishlistId(int wishlistId) {
+		this.wishlistId = wishlistId;
 	}
 
 	public UserEntity getUser() {
@@ -60,7 +60,7 @@ public class WishlistEntity {
 
 	@Override
 	public String toString() {
-		return "WishlistBean [wishlist_id=" + wishlist_id + ", user=" + user + ", product=" + product + "]";
+		return "WishlistBean [wishlistId=" + wishlistId + ", user=" + user + ", product=" + product + "]";
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.cybage.dao;
 
-public interface CartDao {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.cybage.entity.CartEntity;
+
+public interface CartDao extends JpaRepository<CartEntity, Integer> {
 
 }
