@@ -1,0 +1,49 @@
+package com.cybage.mapper;
+
+import org.springframework.beans.BeanUtils;
+
+import com.cybage.bean.WishlistBean;
+import com.cybage.bean.UserBean;
+import com.cybage.bean.ProductBean;
+import com.cybage.bean.CategoryBean;
+import com.cybage.entity.WishlistEntity;
+import com.cybage.entity.UserEntity;
+import com.cybage.entity.ProductEntity;
+import com.cybage.entity.CategoryEntity;
+
+public class WishlistMapper {
+
+	public static WishlistEntity toEntity(WishlistBean wishlistBean, UserEntity userEntity,
+			ProductEntity productEntity) {
+
+		WishlistEntity wishlistEntity = new WishlistEntity();
+		BeanUtils.copyProperties(wishlistBean, wishlistEntity);
+		wishlistEntity.setUser(userEntity);
+		wishlistEntity.setProduct(productEntity);
+		return wishlistEntity;
+	}
+
+	public static WishlistBean toBean(WishlistEntity wishlistEntity) {
+
+		WishlistBean wishlistBean = new WishlistBean();
+		BeanUtils.copyProperties(wishlistEntity, wishlistBean);
+
+		UserBean userBean = new UserBean();
+		BeanUtils.copyProperties(wishlistEntity.getUser(), userBean);
+		wishlistBean.setUser(userBean);
+
+		ProductBean productBean = new ProductBean();
+		BeanUtils.copyProperties(wishlistEntity.getProduct(), productBean);
+
+		CategoryBean categoryBean = new CategoryBean();
+		CategoryEntity categoryEntity = wishlistEntity.getProduct().getCategory();
+		if (categoryEntity != null) {
+			BeanUtils.copyProperties(categoryEntity, categoryBean);
+		}
+		productBean.setCategory(categoryBean);
+
+		wishlistBean.setProduct(productBean);
+
+		return wishlistBean;
+	}
+}

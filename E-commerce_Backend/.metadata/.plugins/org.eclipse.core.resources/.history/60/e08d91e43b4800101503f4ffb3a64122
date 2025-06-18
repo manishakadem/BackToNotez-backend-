@@ -1,0 +1,171 @@
+package com.cybage.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.CartBean;
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.bean.ProductBean;
+import com.cybage.bean.UserBean;
+import com.cybage.dao.CartDao;
+import com.cybage.dao.CartDetailsDao;
+import com.cybage.dao.ProductDao;
+import com.cybage.entity.CartDetailsEntity;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.ProductEntity;
+
+@Service
+public class CartDetailsServiceImpl implements CartDetailsService {
+
+	@Autowired
+	private CartDetailsDao cartDetailsDao;
+
+	@Autowired
+	private CartDao cartDao;
+
+	@Autowired
+	private ProductDao productDao;
+
+//	@Override
+//	public CartDetailsBean addCartDetails(CartDetailsBean cartDetailsBean) {
+//		CartDetailsEntity entity = new CartDetailsEntity();
+//
+//		int cartId = cartDetailsBean.getCart().getCart_id();
+//		int productId = cartDetailsBean.getProduct().getProduct_id();
+//
+//		CartEntity managedCart = cartDao.findById(cartId)
+//				.orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cartId));
+//		ProductEntity managedProduct = productDao.findById(productId)
+//				.orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+//
+//		entity.setCart(managedCart);
+//		entity.setProduct(managedProduct);
+//		entity.setQuantity(cartDetailsBean.getQuantity());
+//		entity.setPrice(cartDetailsBean.getPrice());
+//
+//		CartDetailsEntity savedEntity = cartDetailsDao.save(entity);
+//
+//		// Prepare response bean
+//		CartDetailsBean responseBean = new CartDetailsBean();
+//		responseBean.setCartDetails_id(savedEntity.getCartDetails_id());
+//		responseBean.setQuantity(savedEntity.getQuantity());
+//		responseBean.setPrice(savedEntity.getPrice());
+//
+//		// Set cart bean
+//		CartBean cartBean = new CartBean();
+//		cartBean.setCart_id(savedEntity.getCart().getCart_id());
+//
+//		UserBean userBean = new UserBean();
+//		BeanUtils.copyProperties(savedEntity.getCart().getUser(), userBean);
+//		cartBean.setUser(userBean);
+//
+//		responseBean.setCart(cartBean);
+//
+//		// Set product bean
+//		ProductBean productBean = new ProductBean();
+//		BeanUtils.copyProperties(savedEntity.getProduct(), productBean);
+//		responseBean.setProduct(productBean);
+//
+//		return responseBean;
+//	}
+
+	@Override
+	public CartDetailsBean addCartDetails(CartDetailsBean cartDetailsBean) {
+		// Fetch CartEntity and ProductEntity directly
+		CartEntity managedCart = cartDao.findById(cartDetailsBean.getCart().getCart_id()).orElseThrow(
+				() -> new RuntimeException("Cart not found with ID: " + cartDetailsBean.getCart().getCart_id()));
+
+		ProductEntity managedProduct = productDao.findById(cartDetailsBean.getProduct().getProduct_id())
+				.orElseThrow(() -> new RuntimeException(
+						"Product not found with ID: " + cartDetailsBean.getProduct().getProduct_id()));
+
+		// Save CartDetailsEntity
+		CartDetailsEntity savedEntity = cartDetailsDao.save(new CartDetailsEntity(0, managedCart, managedProduct,
+				cartDetailsBean.getQuantity(), cartDetailsBean.getPrice()));
+
+		// Prepare response bean
+		CartDetailsBean responseBean = new CartDetailsBean();
+		BeanUtils.copyProperties(savedEntity, responseBean);
+
+		// Set cart bean
+		CartBean cartBean = new CartBean();
+		BeanUtils.copyProperties(savedEntity.getCart(), cartBean);
+
+		UserBean userBean = new UserBean();
+		BeanUtils.copyProperties(savedEntity.getCart().getUser(), userBean);
+		cartBean.setUser(userBean);
+
+		responseBean.setCart(cartBean);
+
+		// Set product bean
+		ProductBean productBean = new ProductBean();
+		BeanUtils.copyProperties(savedEntity.getProduct(), productBean);
+		responseBean.setProduct(productBean);
+
+		return responseBean;
+	}
+//	@Override
+//	public CartDetailsBean addCartDetails(CartDetailsBean cartBean) {
+//	    CartEntity cart = cartDao.findById(bean.getCart().getCart_id())
+//	            .orElseThrow(() -> new RuntimeException("Cart not found"));
+//	    ProductEntity product = productDao.findById(bean.getProduct().getProduct_id())
+//	            .orElseThrow(() -> new RuntimeException("Product not found"));
+//
+//	    CartDetailsEntity saved = cartDetailsDao.save(mapper.toEntity(bean, cart, product));
+//	    return mapper.toBean(saved);
+//	}
+
+	@Override
+	public List<CartDetailsBean> displayCartDetails() {
+		
+	    List<CartDetailsBean> cartDetailsBeanList = new ArrayList<>();
+	    List<CartDetailsEntity> cartDetailsEntityList = cartDetailsDao.findAll();
+
+	    for (CartDetailsEntity cartDetailsEntity : cartDetailsEntityList) {
+	        CartDetailsBean cartDetailsBean = new CartDetailsBean();
+	        BeanUtils.copyProperties(cartDetailsEntity, cartDetailsBean);
+
+	        // Set CartBean
+	        CartBean cartBean = new CartBean();
+	        BeanUtils.copyProperties(cartDetailsEntity.getCart(), cartBean);
+
+	        // Set UserBean inside CartBean
+	        UserBean userBean = new UserBean();
+	        BeanUtils.copyProperties(cartDetailsEntity.getCart().getUser(), userBean);
+	        cartBean.setUser(userBean);
+
+	        cartDetailsBean.setCart(cartBean);
+
+	        // Set ProductBean
+	        ProductBean productBean = new ProductBean();
+	        BeanUtils.copyProperties(cartDetailsEntity.getProduct(), productBean);
+	        cartDetailsBean.setProduct(productBean);
+
+	        cartDetailsBeanList.add(cartDetailsBean);
+	    }
+
+	    return cartDetailsBeanList;
+	}
+
+
+	@Override
+	public CartDetailsBean updateProduct(CartDetailsBean cartDetailsBean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteCartDetails(int id) {
+		if (cartDetailsDao.existsById(id)) {
+			cartDetailsDao.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
+}

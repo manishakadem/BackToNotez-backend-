@@ -1,0 +1,105 @@
+package com.cybage.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.CartBean;
+import com.cybage.bean.UserBean;
+import com.cybage.dao.CartDao;
+import com.cybage.dao.UserDao;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.UserEntity;
+
+@Service
+public class CartServiceImpl implements CartService {
+
+	@Autowired
+	private CartDao cartDao;
+
+	@Autowired
+	private UserDao userDao;
+
+//	@Override
+//	public CartBean createCart(CartBean cartBean) {
+//		CartEntity cartEntity = new CartEntity();
+//
+//		int userId = cartBean.getUser().getUserId();
+//		UserEntity managedUser = userDao.findById(userId)
+//				.orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+//
+//		cartEntity.setUser(managedUser);
+//		CartEntity savedEntity = cartDao.save(cartEntity);
+//
+//		CartBean responseBean = new CartBean();
+//		responseBean.setCart_id(savedEntity.getCart_id());
+//
+//		UserBean userBean = new UserBean();
+//		BeanUtils.copyProperties(savedEntity.getUser(), userBean);
+//		responseBean.setUser(userBean);
+//
+//		return responseBean;
+//
+//	}
+//
+//	@Override
+//	public List<CartBean> displaycart() {
+//		List<CartBean> listCartBean = new ArrayList<>();
+//		List<CartEntity> listCartEntity = cartDao.findAll();
+//
+//		for (CartEntity cartEntity : listCartEntity) {
+//			CartBean cartBean = new CartBean();
+//
+//			BeanUtils.copyProperties(cartEntity, cartBean);
+//
+//			UserEntity userEntity = cartEntity.getUser();
+//			if (userEntity != null) {
+//				UserBean userBean = new UserBean(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(),
+//						userEntity.getPassword(), userEntity.getContact());
+//				cartBean.setUser(userBean);
+//			}
+//
+//			listCartBean.add(cartBean);
+//		}
+//		return listCartBean;
+//	}
+	@Override
+	public CartBean createCart(CartBean cartBean) {
+	    int userId = cartBean.getUser().getUserId();
+	    UserEntity userEntity = userDao.findById(userId)
+	            .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+	    CartEntity savedEntity = cartDao.save(new CartEntity(0, userEntity));
+
+	    // Manually mapping UserEntity fields to UserBean
+	    UserBean userBean = new UserBean(
+	        userEntity.getUserId(),
+	        userEntity.getName(),
+	        userEntity.getEmail(),
+	        userEntity.getPassword(),
+	        userEntity.getContact()
+	    );
+
+	    return new CartBean(savedEntity.getCart_id(), userBean);
+	}
+
+
+	 @Override
+	 public List<CartBean> displaycart() {
+	     return cartDao.findAll().stream()
+	         .map(cartEntity -> {
+	             UserEntity userEntity = cartEntity.getUser();
+	             UserBean userBean = (userEntity != null) ? 
+	                 new UserBean(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(),
+	                              userEntity.getPassword(), userEntity.getContact()) : null;
+
+	             return new CartBean(cartEntity.getCart_id(), userBean);
+	         })
+	         .collect(Collectors.toList());
+	 }
+
+}

@@ -1,0 +1,52 @@
+package com.cybage.service;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.CartBean;
+import com.cybage.dao.CartDao;
+import com.cybage.dao.UserDao;
+import com.cybage.entity.CartEntity;
+
+@Service
+public class CartServiceImpl implements CartService {
+	
+	@Autowired
+	private CartDao cartDao;
+	
+	@Autowired
+	private UserDao userDao;
+
+//	  @Override
+//	    public CartBean createCart(CartBean cartBean) {
+//	        CartEntity entity = new CartEntity();
+//	        entity.setUser(userDao.findById(cartBean.getUser().getUserId()).orElse(null));
+//	        CartEntity saved = cartDao.save(entity);
+//
+//	        CartBean result = new CartBean();
+//	        BeanUtils.copyProperties(saved, result);
+//	        return result;
+//	  }
+	@Override
+    public CartBean createCart(CartBean cartBean) {
+        CartEntity cartEntity = new CartEntity();
+
+        int userId = cartBean.getUser().getUserId();
+        UserEntity managedUser = userDao.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        cartEntity.setUser(managedUser);
+        CartEntity savedEntity = cartDao.save(cartEntity);
+
+        CartBean responseBean = new CartBean();
+        responseBean.setCart_id(savedEntity.getCart_id());
+
+        UserBean userBean = new UserBean();
+        BeanUtils.copyProperties(savedEntity.getUser(), userBean);
+        responseBean.setUser(userBean);
+
+        return responseBean;
+    }
+
+}

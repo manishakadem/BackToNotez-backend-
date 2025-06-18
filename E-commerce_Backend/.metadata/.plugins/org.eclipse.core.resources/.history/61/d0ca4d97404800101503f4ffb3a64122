@@ -1,0 +1,93 @@
+package com.cybage.bean;
+
+public class ProductBean {
+
+	private int productId;
+	private String productName;
+	private String productDescription;
+	private double productPrice;
+	private int productStockQuantity;
+	private String productImageUrl;
+	private CategoryBean category;
+
+	public ProductBean() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ProductBean(int productId, String productName, String productDescription, double productPrice,
+			int productStockQuantity, String productImageUrl, CategoryBean category) {
+		super();
+		this.productId = productId;
+		this.productName = productName;
+		this.productDescription = productDescription;
+		this.productPrice = productPrice;
+		this.productStockQuantity = productStockQuantity;
+		this.productImageUrl = productImageUrl;
+		this.category = category;
+	}
+
+	public int getProduct_id() {
+		return productId;
+	}
+
+	public void setProduct_id(int productId) {
+		this.productId = productId;
+	}
+
+	public String getProduct_name() {
+		return productName;
+	}
+
+	public void setProduct_name(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProduct_description() {
+		return productDescription;
+	}
+
+	public void setProduct_description(String productDescription) {
+		this.productDescription = productDescription;
+	}
+
+	public double getProduct_price() {
+		return productPrice;
+	}
+
+	public void setProduct_price(double productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public int getProduct_stock_quantity() {
+		return productStockQuantity;
+	}
+
+	public void setProduct_stock_quantity(int productStockQuantity) {
+		this.productStockQuantity = productStockQuantity;
+	}
+
+	public String getProduct_imageUrl() {
+		return productImageUrl;
+	}
+
+	public void setProduct_imageUrl(String productImageUrl) {
+		this.productImageUrl = productImageUrl;
+	}
+
+	public CategoryBean getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryBean category) {
+		this.category = category;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductBean [productId=" + productId + ", productName=" + productName + ", productDescription="
+				+ productDescription + ", productPrice=" + productPrice + ", productStockQuantity="
+				+ productStockQuantity + ", productImageUrl=" + productImageUrl + ", category=" + category + "]";
+	}
+
+}

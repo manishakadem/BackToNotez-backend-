@@ -1,0 +1,66 @@
+package com.cybage.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cybage.bean.ProductBean;
+import com.cybage.bean.WishlistBean;
+import com.cybage.dao.ProductDao;
+import com.cybage.dao.UserDao;
+import com.cybage.dao.WishlistDao;
+import com.cybage.entity.WishlistEntity;
+
+public class WishlistServiceImpl implements WishlistService {
+
+	@Autowired
+	private WishlistDao wishlistdao;
+
+	@Autowired
+	private ProductDao productdao;
+
+	@Autowired
+	private UserDao userdao;
+
+	@Override
+	public WishlistBean addWishlist(WishlistBean wishlistbean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<WishlistBean> displayWishlist() {
+		List<WishlistBean> listWishlistBean = null;
+		List<WishlistEntity> listWishlistEntity = wishlistdao.findAll();
+		if (listWishlistEntity != null) {
+			listWishlistBean = new ArrayList<>();
+			for (WishlistEntity wishlistEntity : listWishlistEntity) {
+				WishlistBean wishlistbean = new WishlistBean();
+				BeanUtils.copyProperties(wishlistEntity, wishlistbean);
+				listWishlistBean.add(wishlistbean);
+
+			}
+		}
+		return listWishlistBean;
+
+	}
+
+	@Override
+	public WishlistBean updateWishlist(WishlistBean wishlistbean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteWishlist(int id) {
+		if (wishlistdao.existsById(id)) {
+			wishlistdao.deleteById(id);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+}

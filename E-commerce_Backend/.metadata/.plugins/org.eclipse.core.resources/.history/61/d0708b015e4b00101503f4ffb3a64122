@@ -1,0 +1,36 @@
+package com.cybage.mapper;
+
+import org.springframework.beans.BeanUtils;
+
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.bean.CartBean;
+import com.cybage.bean.ProductBean;
+import com.cybage.entity.CartDetailsEntity;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.ProductEntity;
+
+public class CartDetailsMapper {
+
+	public static CartDetailsEntity toEntity(CartDetailsBean bean, CartEntity cart, ProductEntity product) {
+		CartDetailsEntity entity = new CartDetailsEntity();
+		BeanUtils.copyProperties(bean, entity);
+		entity.setCart(cart);
+		entity.setProduct(product);
+		return entity;
+	}
+
+	public static CartDetailsBean toBean(CartDetailsEntity entity) {
+		CartDetailsBean bean = new CartDetailsBean();
+		BeanUtils.copyProperties(entity, bean);
+
+		CartBean cartBean = new CartBean();
+		BeanUtils.copyProperties(entity.getCart(), cartBean);
+		bean.setCart(cartBean);
+
+		ProductBean productBean = new ProductBean();
+		BeanUtils.copyProperties(entity.getProduct(), productBean);
+		bean.setProduct(productBean);
+
+		return bean;
+	}
+}

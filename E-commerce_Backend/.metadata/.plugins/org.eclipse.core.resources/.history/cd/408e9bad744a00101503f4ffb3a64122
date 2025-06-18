@@ -1,0 +1,55 @@
+package com.cybage.mapper;
+
+import com.cybage.bean.CartBean;
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.bean.ProductBean;
+import com.cybage.bean.UserBean;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.CartDetailsEntity;
+import com.cybage.entity.ProductEntity;
+import com.cybage.entity.UserEntity;
+import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CartMapper {
+
+    public static CartEntity toEntity(CartBean cartBean, UserEntity userEntity, List<CartDetailsEntity> cartDetailsEntities) {
+        CartEntity cartEntity = new CartEntity();
+        BeanUtils.copyProperties(cartBean, cartEntity);
+        cartEntity.setUser(userEntity);
+        cartEntity.setCartDetails(cartDetailsEntities);
+        return cartEntity;
+    }
+
+    public static CartBean toBean(CartEntity cartEntity) {
+        CartBean cartBean = new CartBean();
+        BeanUtils.copyProperties(cartEntity, cartBean);
+
+        // Set user
+        UserBean userBean = new UserBean();
+        BeanUtils.copyProperties(cartEntity.getUser(), userBean);
+        cartBean.setUser(userBean);
+
+        // Set cart details list
+        List<CartDetailsBean> cartDetailsBeanList = new ArrayList<>();
+        for (CartDetailsEntity detailsEntity : cartEntity.getCartDetails()) {
+            CartDetailsBean detailsBean = new CartDetailsBean();
+            BeanUtils.copyProperties(detailsEntity, detailsBean);
+
+            // Set product
+            ProductBean productBean = new ProductBean();
+            BeanUtils.copyProperties(detailsEntity.getProduct(), productBean);
+            detailsBean.setProduct(productBean);
+
+            // Set back-reference to cart bean
+            detailsBean.setCart(cartBean);
+
+            cartDetailsBeanList.add(detailsBean);
+        }
+
+        cartBean.setCartDetails(cartDetailsBeanList);
+        return cartBean;
+    }
+}
