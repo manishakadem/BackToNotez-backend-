@@ -1,0 +1,71 @@
+package com.cybage.bean;
+
+public class CartDetailsBean {
+
+	private int cartDetails_id;
+	private CartBean cart;
+	private ProductBean product;
+	private int quantity;
+	private int price;
+
+	public CartDetailsBean() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public CartDetailsBean(int cartDetails_id, CartBean cart, ProductBean product, int quantity, int price) {
+		super();
+		this.cartDetails_id = cartDetails_id;
+		this.cart = cart;
+		this.product = product;
+		this.quantity = quantity;
+		this.price = price;
+	}
+
+	public int getCartDetails_id() {
+		return cartDetails_id;
+	}
+
+	public void setCartDetails_id(int cartDetails_id) {
+		this.cartDetails_id = cartDetails_id;
+	}
+
+	public ProductBean getProduct() {
+		return product;
+	}
+
+	public void setProduct(ProductBean product) {
+		this.product = product;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public CartBean getCart() {
+		return cart;
+	}
+
+	public void setCart(CartBean cart) {
+		this.cart = cart;
+	}
+
+	@Override
+	public String toString() {
+		return "CartDetailsBean [cartDetails_id=" + cartDetails_id + ", cart=" + cart + ", product=" + product
+				+ ", quantity=" + quantity + ", price=" + price + "]";
+	}
+
+}

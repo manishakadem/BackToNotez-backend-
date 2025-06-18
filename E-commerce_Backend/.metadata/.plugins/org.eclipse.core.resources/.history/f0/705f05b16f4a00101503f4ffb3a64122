@@ -1,0 +1,39 @@
+package com.cybage.bean;
+
+public class CartBean {
+	private int cartId;
+	private UserBean user;
+
+	public CartBean() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public CartBean(int cartId, UserBean user) {
+		super();
+		this.cartId = cartId;
+		this.user = user;
+	}
+
+	public int getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
+	}
+
+	public UserBean getUser() {
+		return user;
+	}
+
+	public void setUser(UserBean user) {
+		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "CartBean [cartId=" + cartId + ", user=" + user + "]";
+	}
+
+}

@@ -1,0 +1,27 @@
+package com.cybage.mapper;
+
+import org.springframework.beans.BeanUtils;
+import com.cybage.bean.ProductBean;
+import com.cybage.bean.CategoryBean;
+import com.cybage.entity.ProductEntity;
+import com.cybage.entity.CategoryEntity;
+
+public class ProductMapper {
+
+	public static ProductEntity toEntity(ProductBean productBean, CategoryEntity category) {
+		return new ProductEntity(productBean.getProduct_id(), productBean.getProduct_name(),
+				productBean.getProduct_description(), productBean.getProduct_price(),
+				productBean.getProduct_stock_quantity(), productBean.getProduct_imageUrl(), category);
+	}
+
+	public static ProductBean toBean(ProductEntity productEntity) {
+		ProductBean productBean = new ProductBean();
+		BeanUtils.copyProperties(productEntity, productBean);
+
+		CategoryBean categoryBean = new CategoryBean();
+		BeanUtils.copyProperties(productEntity.getCategory(), categoryBean);
+		productBean.setCategory(categoryBean);
+
+		return productBean;
+	}
+}

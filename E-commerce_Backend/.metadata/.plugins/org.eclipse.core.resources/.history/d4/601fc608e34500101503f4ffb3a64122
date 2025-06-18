@@ -1,0 +1,9 @@
+package com.cybage.bean;
+
+public class CartBean {
+	
+<<<<<<< HEAD
+	
+=======
+>>>>>>> main
+}

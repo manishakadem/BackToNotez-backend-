@@ -1,0 +1,5 @@
+package com.cybage.configuration;
+
+public class SecurityConfig {
+
+}

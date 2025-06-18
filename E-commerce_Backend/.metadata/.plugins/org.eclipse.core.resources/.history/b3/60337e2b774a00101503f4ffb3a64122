@@ -1,0 +1,84 @@
+package com.cybage.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.CartDetailsBean;
+import com.cybage.dao.CartDao;
+import com.cybage.dao.ProductDao;
+import com.cybage.dao.CartDetailsDao;
+import com.cybage.entity.CartDetailsEntity;
+import com.cybage.entity.CartEntity;
+import com.cybage.entity.ProductEntity;
+import com.cybage.mapper.CartDetailsMapper;
+
+@Service
+public class CartDetailsServiceImpl implements CartDetailsService {
+
+	@Autowired
+	private CartDetailsDao cartDetailsDao;
+
+	@Autowired
+	private CartDao cartDao;
+
+	@Autowired
+	private ProductDao productDao;
+
+	@Override
+	public CartDetailsBean addCartDetails(CartDetailsBean cartDetailsBean) {
+
+		CartEntity cart = cartDao.findById(cartDetailsBean.getCart().getCartId()).orElseThrow(
+				() -> new RuntimeException("Cart not found with ID: " + cartDetailsBean.getCart().getCartId()));
+
+		ProductEntity product = productDao.findById(cartDetailsBean.getProduct().getProductId())
+				.orElseThrow(() -> new RuntimeException(
+						"Product not found with ID: " + cartDetailsBean.getProduct().getProductId()));
+
+		CartDetailsEntity entity = CartDetailsMapper.toEntity(cartDetailsBean, cart, product);
+
+		return CartDetailsMapper.toBean(cartDetailsDao.save(entity));
+	}
+
+	@Override
+	public List<CartDetailsBean> displayCartDetails() {
+
+		List<CartDetailsBean> list = new ArrayList<>();
+		for (CartDetailsEntity entity : cartDetailsDao.findAll()) {
+			list.add(CartDetailsMapper.toBean(entity));
+		}
+		return list;
+	}
+
+	@Override
+	public CartDetailsBean updateProduct(CartDetailsBean cartDetailsBean) {
+
+		CartDetailsEntity existing = cartDetailsDao.findById(cartDetailsBean.getCartDetailsId()).orElseThrow(
+				() -> new RuntimeException("CartDetails not found with ID: " + cartDetailsBean.getCartDetailsId()));
+
+		CartEntity cart = cartDao.findById(cartDetailsBean.getCart().getCartId()).orElseThrow(
+				() -> new RuntimeException("Cart not found with ID: " + cartDetailsBean.getCart().getCartId()));
+
+		ProductEntity product = productDao.findById(cartDetailsBean.getProduct().getProductId())
+				.orElseThrow(() -> new RuntimeException(
+						"Product not found with ID: " + cartDetailsBean.getProduct().getProductId()));
+
+		CartDetailsEntity updatedEntity = CartDetailsMapper.toEntity(cartDetailsBean, cart, product);
+		updatedEntity.setCartDetailsId(existing.getCartDetailsId());
+
+		return CartDetailsMapper.toBean(cartDetailsDao.save(updatedEntity));
+	}
+
+	@Override
+	public boolean deleteCartDetails(int id) {
+
+		if (cartDetailsDao.existsById(id)) {
+			cartDetailsDao.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+}

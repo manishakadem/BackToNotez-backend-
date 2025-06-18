@@ -1,0 +1,100 @@
+package com.cybage.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cybage.bean.CategoryBean;
+import com.cybage.bean.ProductBean;
+import com.cybage.dao.CategoryDao;
+import com.cybage.dao.ProductDao;
+import com.cybage.entity.CategoryEntity;
+import com.cybage.entity.ProductEntity;
+
+@Service
+public class ProductServiceImpl implements ProductService {
+
+	@Autowired
+	private ProductDao productdao;
+
+	@Autowired
+	private CategoryDao categorydao;
+
+	@Override
+	public ProductBean addProduct(ProductBean productBean) {
+		// Fetch CategoryEntity directly
+		CategoryEntity managedCategory = categorydao.findById(productBean.getCategory().getCategory_id())
+				.orElseThrow(() -> new RuntimeException(
+						"Category not found with ID: " + productBean.getCategory().getCategory_id()));
+
+		// Save ProductEntity
+		ProductEntity savedEntity = productdao.save(new ProductEntity(0, productBean.getProduct_name(),
+				productBean.getProduct_description(), productBean.getProduct_price(),
+				productBean.getProduct_stock_quantity(), productBean.getProduct_imageUrl(), managedCategory));
+
+		// Prepare response bean
+		ProductBean responseBean = new ProductBean();
+		BeanUtils.copyProperties(savedEntity, responseBean);
+
+		// Set CategoryBean
+		CategoryBean categoryBean = new CategoryBean();
+		BeanUtils.copyProperties(savedEntity.getCategory(), categoryBean);
+		responseBean.setCategory(categoryBean);
+
+		return responseBean;
+	}
+
+
+	@Override
+	public List<ProductBean> displayProducts() {
+		
+		List<ProductBean> productBeanList = new ArrayList<>();
+		List<ProductEntity> productEntityList = productdao.findAll();
+
+		for (ProductEntity productEntity : productEntityList) {
+			ProductBean productBean = new ProductBean();
+			BeanUtils.copyProperties(productEntity, productBean);
+
+			// Set CategoryBean
+			CategoryBean categoryBean = new CategoryBean();
+			BeanUtils.copyProperties(productEntity.getCategory(), categoryBean);
+			productBean.setCategory(categoryBean);
+
+			productBeanList.add(productBean);
+		}
+
+		return productBeanList;
+	}
+
+	@Override
+	public ProductBean updateProduct(ProductBean productBean) {
+		Optional<ProductEntity> requiredProductEntity = productdao.findById(productBean.getProduct_id());
+		if (requiredProductEntity.isPresent()) {
+			ProductEntity updateProductEntity = requiredProductEntity.get();
+
+			BeanUtils.copyProperties(productBean, updateProductEntity);
+			productdao.save(updateProductEntity);
+
+			ProductBean newProductBean = new ProductBean();
+			BeanUtils.copyProperties(updateProductEntity, newProductBean);
+			return newProductBean;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public boolean deleteProduct(int id) {
+		if (productdao.existsById(id)) {
+			productdao.deleteById(id);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+}
